@@ -1,28 +1,12 @@
-import { View, Text, StyleSheet, Image } from "react-native";
+import { StyleSheet, Image } from "react-native";
 import React from "react";
-import { ThemedView } from "@/components/ThemedView";
-import { ThemedText } from "@/components/ThemedText";
-import Products from "@/assets/data/products";
+import products from "@/assets/data/products";
+import ProductListItem from "@/components/ProductListItem";
 
-const product = Products[0];
-
-function ProductListItem() {
-  return (
-    <ThemedView darkColor="#000" style={styles.container}>
-      <Image source={{ uri: product.image }} style={styles.image} />
-      <ThemedText style={styles.title}>{product.name}</ThemedText>
-      <ThemedText>${product.price}</ThemedText>
-    </ThemedView>
-  );
-}
 export default function MenuScreen() {
-  return (
+  return ( 
     <>
-      <ProductListItem />
-      <ProductListItem />
-      <ProductListItem />
-      <ProductListItem />
-      <ProductListItem />
+      <ProductListItem product={products[0]} />
     </>
   );
 }
