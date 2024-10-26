@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Stack, useLocalSearchParams } from "expo-router";
+import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { ThemedView } from "@/components/ThemedView";
 import { ThemedText } from "@/components/ThemedText";
 import products, { defaultPizzaImage } from "@/assets/data/products";
@@ -8,17 +8,21 @@ import { useColorScheme } from "@/hooks/useColorScheme";
 import { Colors } from "@/constants/Colors";
 import { PizzaSize } from "@/types/types";
 import Button from "@/components/Button";
+import { useStore } from "@/store/store";
 
 const sizes: PizzaSize[] = ["S", "M", "L", "XL"];
 export default function ProductListDetail() {
-  const [selectedSize, setSelectedSize] = useState("M");
-
+  const [selectedSize, setSelectedSize] = useState<PizzaSize>("M");
+  const addItem = useStore((state) => state.addItem);
   const { id } = useLocalSearchParams();
   const colorScheme = useColorScheme();
+  const router = useRouter();
   const product = products.find((p) => p.id === Number(id));
   const addToCart = () => {
     if (!product) return;
-    console.warn("Add to cart");
+    // console.warn("Add to cart");
+    addItem(product, selectedSize);
+    router.push("/cart");
   };
   if (!product) return <ThemedText>Product not found.</ThemedText>;
   return (

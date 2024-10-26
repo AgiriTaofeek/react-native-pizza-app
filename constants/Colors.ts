@@ -19,6 +19,8 @@ export const Colors = {
     sizeSelectIcon: "hsl(0, 0%, 90%)",
     sizeSelectedIcon: "hsl(0, 0%, 85%)",
     button: "hsl(210, 20%, 92%)",
+    adminTabBackground: "hsl(197, 85%, 37%)",
+    tintAdmin: tintColorDark,
   },
   dark: {
     text: "hsl(210, 20%, 92%)",
@@ -30,6 +32,8 @@ export const Colors = {
     sizeSelectIcon: "hsl(0, 0%, 16%)",
     sizeSelectedIcon: "hsl(0, 0%, 50%)",
     button: "hsl(210, 15%, 10%)",
+    adminTabBackground: "hsl(197, 85%, 37%)",
+    tintAdmin: tintColorDark,
   },
 };
 
