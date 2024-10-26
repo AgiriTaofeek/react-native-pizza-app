@@ -1,14 +1,15 @@
 import React, { useState } from "react";
-import { Stack, useLocalSearchParams, useRouter } from "expo-router";
+import { Link, Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { ThemedView } from "@/components/ThemedView";
 import { ThemedText } from "@/components/ThemedText";
 import products, { defaultPizzaImage } from "@/assets/data/products";
-import { Image, StyleSheet } from "react-native";
+import { Image, Pressable, StyleSheet } from "react-native";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { Colors } from "@/constants/Colors";
 import { PizzaSize } from "@/types/types";
 import Button from "@/components/Button";
 import { useStore } from "@/store/store";
+import { FontAwesome } from "@expo/vector-icons";
 
 const sizes: PizzaSize[] = ["S", "M", "L", "XL"];
 export default function ProductListDetail() {
@@ -27,7 +28,28 @@ export default function ProductListDetail() {
   if (!product) return <ThemedText>Product not found.</ThemedText>;
   return (
     <ThemedView style={styles.container}>
-      <Stack.Screen options={{ title: `${product.name}` }} />
+      {/* <Stack.Screen options={{ title: `${product.name}` }} /> */}
+
+      <Stack.Screen
+        // name="[id]"
+        options={{
+          title: "Menu",
+          headerRight: () => (
+            <Link href={`/menu/create?id=${id}`} asChild>
+              <Pressable>
+                {({ pressed }) => (
+                  <FontAwesome
+                    name="pencil"
+                    size={25}
+                    color={Colors[colorScheme ?? "light"].text}
+                    style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
+                  />
+                )}
+              </Pressable>
+            </Link>
+          ),
+        }}
+      />
       <Image
         source={{ uri: product.image || defaultPizzaImage }}
         style={styles.image}

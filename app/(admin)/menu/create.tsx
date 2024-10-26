@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { ThemedView } from "@/components/ThemedView";
 import { ThemedText } from "@/components/ThemedText";
-import { Image, StyleSheet, TextInput } from "react-native";
+import { Alert, Image, StyleSheet, TextInput } from "react-native";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { Colors } from "@/constants/Colors";
 import Button from "@/components/Button";
@@ -12,7 +12,7 @@ import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { defaultPizzaImage } from "@/assets/data/products";
-import { Stack } from "expo-router";
+import { Stack, useLocalSearchParams } from "expo-router";
 
 type FormState = {
   name: string;
@@ -30,7 +30,8 @@ export default function CreateProductScreen() {
   const [selectedImage, setSelectedImage] = useState<string | undefined>(
     undefined
   );
-
+  const { id } = useLocalSearchParams();
+  const isUpdating = !!id;
   const {
     control,
     handleSubmit,
@@ -45,11 +46,29 @@ export default function CreateProductScreen() {
   });
   const colorScheme = useColorScheme();
 
+  const onUpdate = (data: any) => {
+    console.warn("Updating Product", data);
+    reset();
+  };
   const onCreate = (data: any) => {
     console.warn("Creating Product", data);
     reset();
   };
-
+  const confirmDelete = () => {
+    Alert.alert("Confirm", "Are you sure you want to delete this product", [
+      {
+        text: "Cancel",
+      },
+      {
+        text: "Delete",
+        style: "destructive",
+        onPress: onDelete,
+      },
+    ]);
+  };
+  const onDelete = () => {
+    console.warn("DELETE!!!");
+  };
   const pickImageAsync = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
@@ -65,7 +84,9 @@ export default function CreateProductScreen() {
   };
   return (
     <ThemedView style={styles.container}>
-      <Stack.Screen options={{ title: "Create Product" }} />
+      <Stack.Screen
+        options={{ title: isUpdating ? "Update Product" : "Create Product" }}
+      />
       <Image
         source={{ uri: selectedImage || defaultPizzaImage }}
         style={styles.image}
@@ -133,7 +154,15 @@ export default function CreateProductScreen() {
       {errors.price && (
         <ThemedText style={{ color: "red" }}>Price is required.</ThemedText>
       )}
-      <Button text="Create" onPress={handleSubmit(onCreate)} />
+      <Button
+        text={isUpdating ? "Update" : "Create"}
+        onPress={isUpdating ? handleSubmit(onUpdate) : handleSubmit(onCreate)}
+      />
+      {isUpdating && (
+        <ThemedText onPress={confirmDelete} style={styles.textButton}>
+          Delete
+        </ThemedText>
+      )}
     </ThemedView>
   );
 }
